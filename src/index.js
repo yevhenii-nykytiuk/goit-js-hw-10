@@ -1,5 +1,5 @@
 
-import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
+import { fetchBreeds, fetchCatByBreed } from './script/cat-api';
 
 
 
@@ -16,16 +16,44 @@ fetchBreeds().then((catName) => {
     option.value = breed.id;
     option.innerHTML = breed.name;
     catSelectOptions.append(option);
-    
   }
+}).catch((error) => console.log(error));
+
+
+
+catSelectOptions.addEventListener("change", (e) => {
   
-  return catSelectOptions;
+  const breedId = e.currentTarget.value;
 
-}).catch((error) => console.log(error));
 
-fetchCatByBreed().then((catId) => {
-  return console.log(catId);
-}).catch((error) => console.log(error));
+  fetchCatByBreed(breedId).then((catDescription) => {
+    return catDescription.forEach(element => {
+      const breedsEl = element.breeds[0];
+      const imagesUrl = element.url;
+      console.log(element);
+      catInfo.innerHTML = createMarkup(imagesUrl, breedsEl);
+   });
+  }).catch((error) => console.log(error));
+})
+
+
+function createMarkup(url, {name, description, temperament}) {
+  return `<div>
+           <div>
+            <img src="${url}" width="600" height="440">
+           </div>
+           <div>
+             <h1>${name}</h1>
+             <p>${description}</p>
+             <p>${temperament}</p>
+           </div>
+         </div>`;
+}
+
+
+
+
+
 
 
 

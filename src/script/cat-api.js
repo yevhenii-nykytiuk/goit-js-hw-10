@@ -13,7 +13,4 @@ function fetchCatByBreed(breedId) {
   return fetch(`${URL2}?api_key=${API_KEY}&breed_ids=${breedId}`).then((response) => response.json());
 }
 
-
-
-
 export { fetchBreeds, fetchCatByBreed };
