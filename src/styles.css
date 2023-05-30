@@ -1,0 +1,18 @@
+.error {
+  color: red;
+  font-weight: 600;
+  display: none;
+}
+
+.loader {
+  font-weight: 600;
+  display: none;
+}
+
+.loader-data {
+  display: block;
+}
+
+.error-data {
+  display: block;
+}

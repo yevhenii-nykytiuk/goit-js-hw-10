@@ -1,46 +1,90 @@
 
 import { fetchBreeds, fetchCatByBreed } from './script/cat-api';
-
-
-
-
+import SlimSelect from 'slim-select';
 
 const catSelectOptions = document.querySelector(".breed-select");
 const catInfo = document.querySelector(".cat-info");
+const loadData = document.querySelector(".loader");
+const errorData = document.querySelector(".error");
 
 fetchBreeds().then((catName) => {
-
-  for (let i = 0; i < catName.length; i += 1) {
-    const breed = catName[i];
-    let option = document.createElement('option');
-    option.value = breed.id;
-    option.innerHTML = breed.name;
+  
+  
+  const catOptions = catName.map((catOption) => {
+      const breed = catOption;
+      let option = document.createElement('option');
+      option.value = breed.id;
+      option.innerHTML = breed.name;
     catSelectOptions.append(option);
-  }
-}).catch((error) => console.log(error));
+    
+    new SlimSelect({
+      select: "#single",
+      // data: [{
+      //   text: breed.id,
+      // }],
+      placeholder: 'Select a breed',
+    })
+
+  })
+
+  
+  
+
+  return catOptions;
+
+}).catch((error) => {
+
+  console.log(error)
+  catSelectOptions.style.display = "none";
+  errorData.classList.add("error-data");
+  
+});
+
+
 
 
 
 catSelectOptions.addEventListener("change", (e) => {
+
   
   const breedId = e.currentTarget.value;
+  const selectBreedId = catSelectOptions.value;
 
+  loadData.classList.add("loader-data");
+  errorData.classList.remove("error-data");
+  catInfo.innerHTML = ""
 
   fetchCatByBreed(breedId).then((catDescription) => {
-    return catDescription.forEach(element => {
-      const breedsEl = element.breeds[0];
-      const imagesUrl = element.url;
-      console.log(element);
-      catInfo.innerHTML = createMarkup(imagesUrl, breedsEl);
-   });
-  }).catch((error) => console.log(error));
+
+    if (selectBreedId) {
+
+      return catDescription.forEach(element => {
+
+        const breedsEl = element.breeds[0];
+        const imagesUrl = element.url;
+        catInfo.innerHTML = createMarkup(imagesUrl, breedsEl);
+
+        loadData.classList.remove("loader-data");
+
+      });
+      
+    } else {
+
+      catInfo.innerHTML = "";
+      
+    }
+  }).catch((error) => {
+    console.log(error) 
+    
+  })
+  
 })
 
+function createMarkup(url, { name, description, temperament }) {
 
-function createMarkup(url, {name, description, temperament}) {
-  return `<div>
+  return `<div style="display: flex; column-gap: 15px; padding-top: 10px;">
            <div>
-            <img src="${url}" width="600" height="440">
+            <img src="${url}" width="600" height="460">
            </div>
            <div>
              <h1>${name}</h1>
@@ -49,6 +93,9 @@ function createMarkup(url, {name, description, temperament}) {
            </div>
          </div>`;
 }
+
+
+
 
 
 
