@@ -1,44 +1,41 @@
 
 import { fetchBreeds, fetchCatByBreed } from './script/cat-api';
-import SlimSelect from 'slim-select';
+
+
 
 const catSelectOptions = document.querySelector(".breed-select");
 const catInfo = document.querySelector(".cat-info");
 const loadData = document.querySelector(".loader");
 const errorData = document.querySelector(".error");
 
+
 fetchBreeds().then((catName) => {
   
   
   const catOptions = catName.map((catOption) => {
-      const breed = catOption;
+    
+    const breed = catOption;
       let option = document.createElement('option');
       option.value = breed.id;
       option.innerHTML = breed.name;
     catSelectOptions.append(option);
     
-    new SlimSelect({
-      select: "#single",
-      // data: [{
-      //   text: breed.id,
-      // }],
-      placeholder: 'Select a breed',
-    })
-
+   
   })
-
-  
-  
 
   return catOptions;
 
 }).catch((error) => {
 
   console.log(error)
+  
   catSelectOptions.style.display = "none";
   errorData.classList.add("error-data");
   
 });
+
+
+
 
 
 
@@ -75,10 +72,11 @@ catSelectOptions.addEventListener("change", (e) => {
     }
   }).catch((error) => {
     console.log(error) 
-    
   })
   
 })
+
+
 
 function createMarkup(url, { name, description, temperament }) {
 
@@ -93,6 +91,9 @@ function createMarkup(url, { name, description, temperament }) {
            </div>
          </div>`;
 }
+
+
+
 
 
 
