@@ -36,11 +36,6 @@ fetchBreeds().then((catName) => {
 
 
 
-
-
-
-
-
 catSelectOptions.addEventListener("change", (e) => {
 
   
@@ -52,6 +47,12 @@ catSelectOptions.addEventListener("change", (e) => {
   catInfo.innerHTML = ""
 
   fetchCatByBreed(breedId).then((catDescription) => {
+
+    if (catDescription.length === 0) {
+      loadData.classList.remove("loader-data");
+      errorData.classList.add("error-data");
+      return;
+    }
 
     if (selectBreedId) {
 
@@ -72,6 +73,7 @@ catSelectOptions.addEventListener("change", (e) => {
     }
   }).catch((error) => {
     console.log(error) 
+    errorData.classList.add("error-data");
   })
   
 })
